@@ -253,15 +253,16 @@ img.app-logo {
 .login-content a,
 .page-card a,
 .forgot-password-message a,
+.page-card-body .forgot-password-message > *,
 .sign-up-message a {
-	color: var(--gantry-safety);
+	color: var(--gantry-safety) !important;
 }
 
 .login-content a:hover,
 .page-card a:hover,
 .forgot-password-message a:hover,
 .sign-up-message a:hover {
-	color: var(--gantry-safety-dark);
+	color: var(--gantry-safety-dark) !important;
 }
 
 /* ---------------------------------------------------------------- *
