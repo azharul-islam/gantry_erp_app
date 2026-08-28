@@ -1,0 +1,54 @@
+/*
+ * Gantry Whitelabel — brand layer for ERPNext (loaded on desk AND website).
+ *
+ * Tokens are ported 1:1 from the Gantry landing site design language
+ * (gantry-landing/src/routes/layout.css). Deeper styling passes build on
+ * these tokens; see the "TODO: deeper styling pass" section at the bottom.
+ */
+
+:root {
+	/* Gantry design tokens */
+	--gantry-canvas: #f8fafc;
+	--gantry-surface: #ffffff;
+	--gantry-border: #e2e8f0;
+	--gantry-border-subtle: #f1f5f9;
+	--gantry-text: #0f172a;
+	--gantry-muted: #64748b;
+	--gantry-steel: #334155;
+	--gantry-safety: #ea580c;
+	--gantry-safety-light: #fff7ed;
+	--gantry-success: #059669;
+	--gantry-success-light: #ecfdf5;
+	--gantry-night: #0c1322;
+	--gantry-night-soft: #141e33;
+	--gantry-night-border: #25344f;
+
+	/* Brand fonts (must be loaded separately — see README) */
+	--gantry-font-sans: "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
+	--gantry-font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+}
+
+/* ---------------------------------------------------------------- *
+ * Initial pass — keep this small on purpose.                        *
+ * ---------------------------------------------------------------- */
+
+/* Website + desk: switch to the Gantry font stack. */
+body {
+	font-family: var(--gantry-font-sans);
+	-webkit-font-smoothing: antialiased;
+}
+
+/* Brand-colored text selection everywhere. */
+::selection {
+	background: var(--gantry-safety-light);
+	color: #7c2d12;
+}
+
+/* ---------------------------------------------------------------- *
+ * TODO: deeper styling pass (next iteration)                        *
+ * - Website navbar / primary button color      -> --gantry-safety   *
+ * - Website + login page footer styling                            *
+ * - Login page: hide "Frappe Framework" powered-by line             *
+ * - Desk sidebar / header accent color                             *
+ * - Load Plus Jakarta Sans + JetBrains Mono via @font-face or CDN   *
+ * ---------------------------------------------------------------- */
