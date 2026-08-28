@@ -13,11 +13,15 @@ jobs:
     permissions:
       packages: write
     steps:
-      - name: List packages, then set visibility to public
+      - name: Inspect and fix package visibility
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          echo "=== container packages ==="
-          gh api "/user/packages?package_type=container" --jq '.[].name' || true
-          echo "=== full records ==="
-          gh api "/user/packages?package_type=container" --jq '.[] | {name, package_type, visibility, html_url}' || true
+          echo "=== list (package_type=container) ==="
+          gh api "/user/packages?package_type=container" --jq '.[] | {name, visibility, html_url}' || true
+          echo "=== list (package_type=docker) ==="
+          gh api "/user/packages?package_type=docker" --jq '.[] | {name, visibility}' || true
+          for name in gantry_erp_app gantry-erpnext-demo; do
+            echo "=== PATCH $name ==="
+            gh api --method PATCH "/user/packages/container/$name" -f visibility=public || true
+          done
