@@ -2,9 +2,15 @@
  * Gantry Whitelabel — brand layer for ERPNext (loaded on desk AND website).
  *
  * Tokens are ported 1:1 from the Gantry landing site design language
- * (gantry-landing/src/routes/layout.css). Deeper styling passes build on
- * these tokens; see the "TODO: deeper styling pass" section at the bottom.
+ * (gantry-landing/src/routes/layout.css). This pass replaces ERPNext's
+ * default blue accents with the Gantry brand palette (slate + safety
+ * orange), swaps every Frappe/ERPNext logo for the Gantry mark, and
+ * loads the brand fonts (Plus Jakarta Sans / JetBrains Mono).
  */
+
+/* Brand fonts — loaded by the browser from Google Fonts (system fallbacks
+   are part of the token stacks below, so the UI degrades gracefully). */
+@import url("https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap");
 
 :root {
 	/* Gantry design tokens */
@@ -16,6 +22,8 @@
 	--gantry-muted: #64748b;
 	--gantry-steel: #334155;
 	--gantry-safety: #ea580c;
+	--gantry-safety-dark: #c2410c;
+	--gantry-safety-darker: #9a3412;
 	--gantry-safety-light: #fff7ed;
 	--gantry-success: #059669;
 	--gantry-success-light: #ecfdf5;
@@ -23,32 +31,262 @@
 	--gantry-night-soft: #141e33;
 	--gantry-night-border: #25344f;
 
-	/* Brand fonts (must be loaded separately — see README) */
+	/* Brand fonts */
 	--gantry-font-sans: "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
 	--gantry-font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
 }
 
 /* ---------------------------------------------------------------- *
- * Initial pass — keep this small on purpose.                        *
+ * 1. Brand primary — every --primary / --btn-primary consumer        *
+ *    (buttons, checkboxes, focus rings, progress, calendar,          *
+ *    filters, web forms) turns Gantry safety orange.                 *
  * ---------------------------------------------------------------- */
+:root,
+[data-theme="light"] {
+	--primary: var(--gantry-safety) !important;
+	--primary-color: var(--gantry-safety) !important;
+	--brand-color: var(--gantry-safety) !important;
+	--btn-primary: var(--gantry-safety) !important;
+	--primary-light: var(--gantry-safety-light) !important;
+	--primary-dark: var(--gantry-safety-dark) !important;
+	/* focus ring (was blue #65b9fc) */
+	--focus-blue: 0px 0px 0px 2px rgba(234, 88, 12, 0.35) !important;
+	/* row highlight glow (was blue) */
+	--highlight-shadow: 1px 1px 10px var(--gantry-safety-light), 0px 0px 4px var(--gantry-safety) !important;
+	/* diff highlight (was blue-200) */
+	--diff-changed: #fed7aa !important;
+	/* Gantry orange scale replaces the Frappe blue scale, so every
+	   var(--blue-*) consumer (info alerts, links, avatars, charts,
+	   calendar, POS, login page) becomes brand-toned. */
+	--blue-50: #fff7ed !important;
+	--blue-100: #ffedd5 !important;
+	--blue-200: #fed7aa !important;
+	--blue-300: #fdba74 !important;
+	--blue-400: #fb923c !important;
+	--blue-500: #ea580c !important;
+	--blue-600: #c2410c !important;
+	--blue-700: #c2410c !important;
+	--blue-800: #9a3412 !important;
+	--blue-900: #7c2d12 !important;
+	--dark-blue-500: #c2410c !important;
+	/* semantic "blue" pairings follow the new scale */
+	--bg-blue: var(--blue-100) !important;
+	--bg-light-blue: var(--blue-50) !important;
+	--bg-dark-blue: var(--blue-300) !important;
+	--text-on-blue: var(--blue-700) !important;
+	--text-on-light-blue: var(--blue-600) !important;
+	--text-on-dark-blue: var(--blue-800) !important;
+	/* info alerts: blue -> brand orange */
+	--alert-text-info: var(--blue-700) !important;
+	--alert-bg-info: var(--blue-50) !important;
+	/* espresso semantic tokens (used by cards, menu, avatars) */
+	--outline-blue-1: #fdba74 !important;
+	--surface-blue-1: #fff7ed !important;
+	--surface-blue-2: #ffedd5 !important;
+	--surface-blue-3: #ea580c !important;
+	--ink-blue-1: #fff7ed !important;
+	--ink-blue-2: #f97316 !important;
+	--ink-blue-3: #ea580c !important;
+	--ink-blue-6: #7c2d12 !important;
+	--ink-blue-link: #ea580c !important;
+	/* brand-tinted gradients */
+	--linear-blue: linear-gradient(to bottom, rgba(234, 88, 12, 0.067) 0%, rgba(194, 65, 12, 0.029) 100%) !important;
+	--angular-blue: conic-gradient(rgba(194, 65, 12, 0) 72.38%, rgba(194, 65, 12, 0) 99.87%) !important;
+}
 
-/* Website + desk: switch to the Gantry font stack. */
+/* ---------------------------------------------------------------- *
+ * 2. Dark desk theme — same brand remap on dark surfaces.            *
+ * ---------------------------------------------------------------- */
+[data-theme="dark"] {
+	--primary: var(--gantry-safety) !important;
+	--primary-color: var(--gantry-safety) !important;
+	--brand-color: var(--gantry-safety) !important;
+	--btn-primary: var(--gantry-safety) !important;
+	--primary-light: rgba(234, 88, 12, 0.18) !important;
+	--primary-dark: var(--gantry-safety-dark) !important;
+	--focus-blue: 0px 0px 0px 2px rgba(234, 88, 12, 0.45) !important;
+	--highlight-shadow: 1px 1px 10px rgba(234, 88, 12, 0.15), 0px 0px 4px rgba(234, 88, 12, 0.5) !important;
+	--diff-changed: #9a3412 !important;
+	--blue-50: #431407 !important;
+	--blue-100: #4a1d05 !important;
+	--blue-200: #5c2408 !important;
+	--blue-300: #7c2d12 !important;
+	--blue-400: #9a3412 !important;
+	--blue-500: #ea580c !important;
+	--blue-600: #f97316 !important;
+	--blue-700: #fb923c !important;
+	--blue-800: #fdba74 !important;
+	--blue-900: #fed7aa !important;
+	--dark-blue-500: #fb923c !important;
+	--bg-blue: #431407 !important;
+	--bg-light-blue: #431407 !important;
+	--bg-dark-blue: #7c2d12 !important;
+	--text-on-blue: #fdba74 !important;
+	--text-on-light-blue: #fdba74 !important;
+	--text-on-dark-blue: #fed7aa !important;
+	--alert-text-info: #fdba74 !important;
+	--alert-bg-info: #431407 !important;
+	--outline-blue-1: #7c2d12 !important;
+	--surface-blue-1: #431407 !important;
+	--surface-blue-2: #5c2408 !important;
+	--surface-blue-3: #fb923c !important;
+	--ink-blue-1: #431407 !important;
+	--ink-blue-2: #fb923c !important;
+	--ink-blue-3: #fdba74 !important;
+	--ink-blue-6: #fdba74 !important;
+	--ink-blue-link: #fb923c !important;
+}
+
+/* ---------------------------------------------------------------- *
+ * 3. Fonts + selection.                                              *
+ * ---------------------------------------------------------------- */
 body {
 	font-family: var(--gantry-font-sans);
 	-webkit-font-smoothing: antialiased;
 }
 
-/* Brand-colored text selection everywhere. */
+/* keep the desk's mono usage on brand mono */
+code,
+kbd,
+pre,
+samp,
+.mono,
+.text-mono {
+	font-family: var(--gantry-font-mono);
+}
+
 ::selection {
 	background: var(--gantry-safety-light);
-	color: #7c2d12;
+	color: var(--gantry-safety-darker);
 }
 
 /* ---------------------------------------------------------------- *
- * TODO: deeper styling pass (next iteration)                        *
- * - Website navbar / primary button color      -> --gantry-safety   *
- * - Website + login page footer styling                            *
- * - Login page: hide "Frappe Framework" powered-by line             *
- * - Desk sidebar / header accent color                             *
- * - Load Plus Jakarta Sans + JetBrains Mono via @font-face or CDN   *
+ * 4. Logo — replace every Frappe/ERPNext logo with the Gantry mark.  *
+ *    The SVGs live in the site public dir (nginx-served volume) and  *
+ *    are copied there by init + the nightly reset (see ops compose). *
  * ---------------------------------------------------------------- */
+/* login page, update-password, website navbar brand */
+img.app-logo {
+	content: url("/whitelabel/gantry-logo.svg");
+	max-height: 32px;
+	width: auto;
+	object-fit: contain;
+}
+
+/* desk desktop page brand */
+#brand-logo {
+	content: url("/whitelabel/gantry-logo.svg");
+	height: 28px;
+	width: auto;
+}
+
+/* desk sidebar header (compact crane mark) */
+.sidebar-header .header-logo img {
+	content: url("/whitelabel/gantry-mark.svg");
+	width: 24px;
+	height: 24px;
+	object-fit: contain;
+}
+
+/* desk splash screen */
+.centered.splash img {
+	content: url("/whitelabel/gantry-logo.svg");
+	max-width: 160px;
+	height: auto;
+}
+
+/* keep the swapped logos legible in the dark desk theme */
+[data-theme="dark"] img.app-logo,
+[data-theme="dark"] #brand-logo,
+[data-theme="dark"] .centered.splash img {
+	filter: brightness(0) invert(1);
+}
+
+/* ---------------------------------------------------------------- *
+ * 5. Buttons — website bootstrap primaries are compiled, not var-    *
+ *    driven, so pin them to the brand explicitly. The desk uses      *
+ *    --btn-primary (remapped above).                                 *
+ * ---------------------------------------------------------------- */
+.btn-primary {
+	background-color: var(--gantry-safety) !important;
+	border-color: var(--gantry-safety) !important;
+	color: #ffffff !important;
+}
+
+.btn-primary:hover,
+.btn-primary:focus,
+.btn-primary.focus {
+	background-color: var(--gantry-safety-dark) !important;
+	border-color: var(--gantry-safety-dark) !important;
+	color: #ffffff !important;
+}
+
+.btn-primary:not(:disabled):not(.disabled):active,
+.btn-primary:not(:disabled):not(.disabled).active,
+.show > .btn-primary.dropdown-toggle {
+	background-color: var(--gantry-safety-darker) !important;
+	border-color: var(--gantry-safety-darker) !important;
+	color: #ffffff !important;
+}
+
+.btn-primary.disabled,
+.btn-primary:disabled {
+	background-color: #f1a274 !important;
+	border-color: #f1a274 !important;
+	color: #ffffff !important;
+}
+
+.btn-primary-light {
+	background-color: var(--gantry-safety-light) !important;
+	color: var(--gantry-safety-darker) !important;
+}
+
+.btn-primary-light:hover,
+.btn-primary-light:focus {
+	background-color: var(--blue-100) !important;
+	color: var(--gantry-safety-darker) !important;
+}
+
+/* ---------------------------------------------------------------- *
+ * 6. Login page — brand the card, links and social buttons.          *
+ * ---------------------------------------------------------------- */
+.login-content a,
+.page-card a,
+.forgot-password-message a,
+.sign-up-message a {
+	color: var(--gantry-safety);
+}
+
+.login-content a:hover,
+.page-card a:hover,
+.forgot-password-message a:hover,
+.sign-up-message a:hover {
+	color: var(--gantry-safety-dark);
+}
+
+/* ---------------------------------------------------------------- *
+ * 7. Website — brand-tinted navbar accents, links, sidebars.         *
+ * ---------------------------------------------------------------- */
+/* primary navbar variant (blue-500) -> brand orange */
+.navbar-primary {
+	background-color: var(--gantry-safety) !important;
+}
+
+.navbar-primary .navbar-modal-search {
+	background-color: var(--gantry-safety-dark) !important;
+}
+
+/* sidebar item highlight (used --primary-light) */
+.sidebar-item-icon {
+	background-color: var(--primary-light) !important;
+}
+
+/* ---------------------------------------------------------------- *
+ * 8. Remaining hardcoded blue stragglers.                            *
+ *    (POS, charts, avatars and calendar blue come from the remapped  *
+ *    --blue-* scale in section 1, so they are already brand-toned.) *
+ * ---------------------------------------------------------------- */
+/* text-info / info badges follow the brand */
+.text-info {
+	color: var(--gantry-safety) !important;
+}

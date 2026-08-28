@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 136 24" fill="none">
+  <!-- Gantry crane mark (from gantry-landing Logo.svelte / favicon.svg) -->
+  <g stroke="#EA580C" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M4 20V5a1 1 0 0 1 1-1h14a1 1 0 0 1 1 1v15"/>
+    <path d="M4 9h16"/>
+    <path d="M9 20V9"/>
+    <path d="M15 20V9"/>
+  </g>
+  <circle cx="12" cy="6.5" r="0.8" fill="#EA580C"/>
+  <!-- Wordmark -->
+  <text x="31" y="16.5" font-family="'Plus Jakarta Sans', ui-sans-serif, system-ui, sans-serif" font-size="15" font-weight="800" letter-spacing="1.8" fill="#0F172A">GANTRY</text>
+</svg>

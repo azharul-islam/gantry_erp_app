@@ -17,11 +17,22 @@ website and desk. Built for Frappe v16 / ERPNext v16.
   - `app_include_css` → loaded in the desk (desk.html)
   - `web_include_css` → loaded on every website page
   It carries the Gantry design tokens 1:1 from
-  `gantry-landing/src/routes/layout.css` (`--gantry-*` variables, Plus
-  Jakarta Sans / JetBrains Mono font stack) plus a deliberately small
-  first pass. The deeper styling pass (navbar/button colours, login
-  page, desk accents) is itemised in the TODO block at the bottom of
-  the CSS file.
+  `gantry-landing/src/routes/layout.css` (`--gantry-*` variables) and:
+  - **replaces ERPNext's default blue** — `--primary`/primary buttons
+    and the whole `--blue-*` scale (alerts, links, avatars, charts,
+    calendar, POS, login page) are remapped to the Gantry slate + safety
+    orange palette, in light and dark desk themes;
+  - **swaps every Frappe/ERPNext logo** for the Gantry crane mark
+    (login page, website navbar, desk desktop, sidebar, splash) via
+    `content: url(...)` against `/whitelabel/gantry-logo.svg` +
+    `/whitelabel/gantry-mark.svg` (nginx-served from the site public
+    dir — see the ops compose init + nightly-reset copy steps);
+  - **loads the brand fonts** (Plus Jakarta Sans / JetBrains Mono from
+    Google Fonts with system fallbacks);
+  - brand-polishes buttons, links, login page and website navbar.
+- **Logo hooks** — `app_logo_url = "/whitelabel/gantry-logo.svg"` in
+  hooks.py feeds Frappe's `get_app_logo()` (login page `<img src>`,
+  boot) so the visible logo src is the Gantry one even before CSS swaps.
 
 ## Local development
 
@@ -91,14 +102,14 @@ Pre-commit is configured to use: ruff, eslint, prettier, pyupgrade.
 
 ## Still to do (next iterations)
 
-- Deeper styling pass per the TODO block in `whitelabel.css` (brand
-  primary colour, login page, desk accents, real font loading).
-- Optional: strip the invisible `<!-- Built on Frappe ... -->` source
-  comment emitted by `frappe/templates/base.html` (visible only in
-  "view source"; not rendered).
+- Strip the invisible `<!-- Built on Frappe ... -->` source comment
+  emitted by `frappe/templates/base.html` (visible only in "view
+  source"; not rendered).
 - Decide whether the ury POS frontends (React/Vue, separately bundled)
   need their own brand pass — the ERPNext web/desk layer is covered by
   this app.
+- Set the site favicon to `/whitelabel/gantry-mark.svg` (Website
+  Settings → favicon; the ops init already has the command to do it).
 
 ## License
 

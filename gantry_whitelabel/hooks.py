@@ -30,6 +30,11 @@ app_license = "mit"
 app_include_css = "/whitelabel/whitelabel.css"
 # app_include_js = "/assets/gantry_whitelabel/js/gantry_whitelabel.js"
 
+# Brand logo: replaces the Frappe/ERPNext logo on the login page, boot
+# and website navbar. Frappe's get_app_logo() uses logos[1] when two
+# apps define it (frappe first, then this app) — this wins.
+app_logo_url = "/whitelabel/gantry-logo.svg"
+
 # include js, css files in header of web template
 web_include_css = "/whitelabel/whitelabel.css"
 # web_include_js = "/assets/gantry_whitelabel/js/gantry_whitelabel.js"
