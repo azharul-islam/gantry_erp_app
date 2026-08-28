@@ -35,24 +35,43 @@ bench restart                                 # after changing Python/hooks
 Changes to `public/css/*.css` are picked up by `bench build --app gantry_whitelabel`
 (dev: assets are served via `bench watch` / dev mode).
 
-## Deploying to the hosted demo
+## Deploying to the demo (demo.gantry.online)
 
-The app must be a git repo with a remote (bench apps are per-app git
-repos — this one lives at `apps/gantry_whitelabel` inside the bench).
+The demo runs as a Coolify compose service (`erpnext-demo`) on
+coolify.gantry.online. All ERPNext containers use the stock
+`frappe/erpnext:v16.32.3` image; the app is cloned at runtime from this
+repo (public: `azharul-islam/gantry_erp_app`, branch `version-16`) into
+the shared `sites/` volume and symlinked into `apps/` by the compose
+`init` container. `init` then regenerates `apps.txt`, installs the app
+if missing, copies its static assets into `sites/assets/`, and re-takes
+the clean snapshot — which is what the nightly 03:00 reset restores, so
+the white label survives resets by design.
 
-1. Create a GitHub repo (e.g. `gantry/gantry_whitelabel`) and push this
-   folder to a `version-16` branch.
-2. **If the demo runs on Frappe Cloud** — open the site → *Install Apps*
-   → paste the GitHub repo URL (install from GitHub, not the
-   marketplace). Frappe Cloud clones it, installs it on the site and
-   rebuilds assets.
-3. **If the demo is self-hosted** — on the demo server's bench:
+Full cycle for a change:
 
-   ```bash
-   bench get-app https://github.com/gantry/gantry_whitelabel.git --branch version-16
-   bench --site <demo-site> install-app gantry_whitelabel
-   bench build && bench restart
-   ```
+1. Commit + push to `version-16` (no CI needed — nothing builds).
+2. Redeploy the demo compose: `.ssh_demo/deploy-whitelabel.sh` PATCHes
+   Coolify with `compose.v20.yaml` (base64 `docker_compose_raw`), then
+   restart the service (`coolify service restart`) — the PATCH only
+   updates the definition; the restart applies it and re-runs `init`
+   (which pulls the latest app code, rebuilds assets, re-snapshots).
+3. Verify: `.ssh_demo/verify-whitelabel.sh` + the manual checks below.
+
+Manual notes:
+
+- The compose and deploy tooling live in `gantry-landing/.ssh_demo/`
+  (handover + recipe in `gantry-landing/docs/`).
+- Coolify quirk: `PATCH + instant_deploy` updates the compose but does
+  not recreate containers in this Coolify version — always follow the
+  PATCH with a service restart.
+- `bench build` does not work in the container (no esbuild), so `init`
+  copies `public/` → `sites/assets/gantry_whitelabel/` directly — which
+  is all `bench build` would do for this CSS-only app.
+- The `Dockerfile` in this repo documents the alternative image-based
+  route (useful if the demo ever needs it), but it is not used by the
+  current deploy.
+- If the demo is ever moved off Coolify: plain bench deploy works too —
+  `bench get-app` from this repo, install, build, restart.
 
 ## Contributing
 
