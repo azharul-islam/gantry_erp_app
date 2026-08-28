@@ -291,3 +291,16 @@ img.app-logo {
 .text-info {
 	color: var(--gantry-safety) !important;
 }
+
+/* ERPNext module shortcut icons are baked blue SVG files
+   (#0289F7 / #0981E3 + white) — hue-shift them to Gantry orange.
+   Scoped to erpnext: frappe icons are gray, hrms icons are green. */
+img[src*="/erpnext/icons/desktop_icons/"] {
+	filter: hue-rotate(174deg);
+}
+
+/* Desktop workspace shortcuts that fall back to the frappe logo —
+   swap in the Gantry crane mark instead. */
+.desktop-icon img[src$="frappe-framework-logo.svg"] {
+	content: url("/whitelabel/gantry-mark.svg");
+}
