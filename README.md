@@ -108,8 +108,11 @@ Pre-commit is configured to use: ruff, eslint, prettier, pyupgrade.
 - Decide whether the ury POS frontends (React/Vue, separately bundled)
   need their own brand pass — the ERPNext web/desk layer is covered by
   this app.
-- Set the site favicon to `/whitelabel/gantry-mark.svg` (Website
-  Settings → favicon; the ops init already has the command to do it).
+- The desk page's `meta name="theme-color"` is still the default
+  `#0089FF` (browser chrome only; not CSS-fixable — would need a tiny
+  `app_include_js` that rewrites the meta tag).
+- The "About" dialog still shows Frappe branding (out of scope for the
+  white label).
 
 ## License
 
