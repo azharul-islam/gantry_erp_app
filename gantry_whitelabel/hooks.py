@@ -25,11 +25,13 @@ app_license = "mit"
 # ------------------
 
 # include js, css files in header of desk.html
-app_include_css = "/assets/gantry_whitelabel/css/whitelabel.css"
+# NOTE: assets are served from the site's public dir (volume) via nginx's
+# try_files fallback — see compose init (copies public/css -> sites/<site>/public/whitelabel/)
+app_include_css = "/whitelabel/whitelabel.css"
 # app_include_js = "/assets/gantry_whitelabel/js/gantry_whitelabel.js"
 
 # include js, css files in header of web template
-web_include_css = "/assets/gantry_whitelabel/css/whitelabel.css"
+web_include_css = "/whitelabel/whitelabel.css"
 # web_include_js = "/assets/gantry_whitelabel/js/gantry_whitelabel.js"
 
 # include custom scss in every website theme (without file extension ".scss")
