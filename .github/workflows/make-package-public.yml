@@ -13,9 +13,11 @@ jobs:
     permissions:
       packages: write
     steps:
-      - name: Set package visibility to public
+      - name: List packages, then set visibility to public
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          gh api --method PATCH "/user/packages/container/gantry-erpnext-demo" \
-            -f visibility=public
+          echo "=== container packages ==="
+          gh api "/user/packages?package_type=container" --jq '.[].name' || true
+          echo "=== full records ==="
+          gh api "/user/packages?package_type=container" --jq '.[] | {name, package_type, visibility, html_url}' || true
