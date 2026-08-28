@@ -1,0 +1,21 @@
+name: make-package-public
+
+# One-shot helper: the demo server pulls this image without registry
+# credentials, so the GHCR package must be public. GITHUB_TOKEN has
+# write:packages (the local gh token does not), so this runs on the
+# Actions side. Trigger manually: gh workflow run make-package-public.yml
+on:
+  workflow_dispatch:
+
+jobs:
+  make-public:
+    runs-on: ubuntu-latest
+    permissions:
+      packages: write
+    steps:
+      - name: Set package visibility to public
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh api --method PATCH "/user/packages/container/gantry-erpnext-demo" \
+            -f visibility=public
