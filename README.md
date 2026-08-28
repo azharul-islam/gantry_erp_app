@@ -41,11 +41,11 @@ The demo runs as a Coolify compose service (`erpnext-demo`) on
 coolify.gantry.online. All ERPNext containers use the stock
 `frappe/erpnext:v16.32.3` image; the app is cloned at runtime from this
 repo (public: `azharul-islam/gantry_erp_app`, branch `version-16`) into
-the shared `sites/` volume and symlinked into `apps/` by the compose
-`init` container. `init` then regenerates `apps.txt`, installs the app
-if missing, copies its static assets into `sites/assets/`, and re-takes
-the clean snapshot — which is what the nightly 03:00 reset restores, so
-the white label survives resets by design.
+the shared `sites/gantry_whitelabel` volume. `init` then appends the app
+to `apps.txt`, installs it if missing, copies its CSS into
+`sites/<site>/public/whitelabel/` (nginx serves that from the volume),
+and re-takes the clean snapshot — which is what the nightly 03:00 reset
+restores, so the white label survives resets by design.
 
 Full cycle for a change:
 
@@ -64,9 +64,13 @@ Manual notes:
 - Coolify quirk: `PATCH + instant_deploy` updates the compose but does
   not recreate containers in this Coolify version — always follow the
   PATCH with a service restart.
-- `bench build` does not work in the container (no esbuild), so `init`
-  copies `public/` → `sites/assets/gantry_whitelabel/` directly — which
-  is all `bench build` would do for this CSS-only app.
+- `sites/assets` is a symlink to the image's per-container assets dir, so
+  runtime copies there are ephemeral. `init` therefore copies the CSS into
+  `sites/<site>/public/whitelabel/` — nginx serves that from the shared
+  volume via its `try_files` fallback — and the hooks reference
+  `/whitelabel/whitelabel.css`. The nightly reset script re-copies the CSS
+  after each restore. `PYTHONPATH=sites/gantry_whitelabel` (compose env)
+  makes the app importable — the venv's `.pth` files only know erpnext+frappe.
 - The `Dockerfile` in this repo documents the alternative image-based
   route (useful if the demo ever needs it), but it is not used by the
   current deploy.
